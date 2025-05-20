@@ -13,11 +13,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Category {
+    ELETRONIC
+    FOOD
+    FRAGILE
+}
+
 model Product {
   id String @id @default(uuid())
   name String
   description String
   price Decimal
+  balance Decimal
+  available Boolean
+  category Category
+  tags String[]
   creationDate DateTime
   updateDate DateTime 
 
@@ -30,5 +40,7 @@ model User {
 
   @@map("users")
 }
+
+
 
 
