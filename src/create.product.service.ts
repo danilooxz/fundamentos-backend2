@@ -1,48 +1,67 @@
 import { Injectable } from "@nestjs/common";
+import { ProductsRepository } from "./products_repository";
+import { error } from "console";
+import { Category } from "@prisma/client";
 
 interface Product {
-    name: string,
-    model: string,
-    dateManufacture: string,
-    year: string,
-    brand: string,
-    email: string,
-    cpf: string
+    id: String;
+    name: string;   
+    description: string;
+    price: number;        
+    inStock: number;                 
+    isAvailable: boolean;  
+    category: Category;     
+    tags: string[];
+    createdAt: Date;
+    updatedAt: Date; 
 }
 
-interface CreateProductServiceRequest{
-    name: string,
-      model: string,
-      dateManufacture: string,
-      year: number,
-      brand: string,
-      email: string,
-      cpf: string
+interface CreateProductServiceRequest{          
+    name: string;   
+    description: string;
+    price: number;        
+    inStock: number;                 
+    isAvailable: boolean;  
+    category: Category;     
+    tags: string[];
 }
 
 type CreateProductServiceResponse = {
-    product: CreateProductService;
-    
+    product: Product; 
 }
 
 @Injectable()
 export class CreateProductService {
-    constructor (){}
+    constructor (private productRepository: ProductsRepository) {}
 
-        async execute({
-            brand,
-            name,
-            cpf,
-            email,
-            dateManufacture,
-            model,
-            year
+        async execute({        
+        name,      
+        description, 
+        price,        
+        inStock,                 
+        isAvailable,  
+        category,     
+        tags        
 
+    }:CreateProductServiceRequest):Promise<CreateProductServiceResponse> {
+        const productWithSameName = await this.productRepository.findByName(name);
 
-
-        }:CreateProductServiceRequest):Promise<CreateProductServiceResponse>{
-            return new Promise(()=> {});
+        if (productWithSameName) {
+            throw new error("Product already exists");
+        }
         
+        const product = {
+        name,      
+        description, 
+        price,        
+        inStock,                 
+        isAvailable,  
+        category,     
+        tags,    
+        };
 
+        await this.productRepository.create(product);
+
+        return new Promise(() => product)
     }
 }
