@@ -22,6 +22,7 @@ enum Category {
 }
 
 model Product {
+  id           String @id @default(uuid())
   name         String  @unique
   description  String?
   price        Float
@@ -44,4 +45,13 @@ model User {
   updatedAt  DateTime? @updatedAt     @map("updated_at")
 
   @@map("users")
+}
+
+model Model {
+  id String    @id @default(uuid())
+  name String @unique
+  createdAt  DateTime  @default(now())@map("create_at")
+  updatedAt  DateTime? @updatedAt     @map("updated_at")
+
+  @@map("models")
 }

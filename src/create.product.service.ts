@@ -3,17 +3,17 @@ import { ProductsRepository } from "./products_repository";
 import { error } from "console";
 import { Category } from "@prisma/client";
 
-interface Product {
+export interface Product {
     id: String;
     name: string;   
-    description: string;
+    description?: string;
     price: number;        
     inStock: number;                 
     isAvailable: boolean;  
     category: Category;     
     tags: string[];
-    createdAt: Date;
-    updatedAt: Date; 
+    createdAt: string | Date | undefined;
+    updatedAt: string | Date | undefined | null;
 }
 
 interface CreateProductServiceRequest{          
@@ -35,13 +35,13 @@ export class CreateProductService {
     constructor (private productRepository: ProductsRepository) {}
 
         async execute({        
-        name,      
-        description, 
-        price,        
-        inStock,                 
-        isAvailable,  
-        category,     
-        tags        
+            name,      
+            description, 
+            price,        
+            inStock,                 
+            isAvailable,  
+            category,     
+            tags        
 
     }:CreateProductServiceRequest):Promise<CreateProductServiceResponse> {
         const productWithSameName = await this.productRepository.findByName(name);
@@ -51,17 +51,30 @@ export class CreateProductService {
         }
         
         const product = {
-        name,      
-        description, 
-        price,        
-        inStock,                 
-        isAvailable,  
-        category,     
-        tags,    
+            name,      
+            description, 
+            price,        
+            inStock,                 
+            isAvailable,  
+            category,     
+            tags,    
         };
 
-        await this.productRepository.create(product);
+        const newProduct = await this.productRepository.create(product);
 
-        return new Promise(() => product)
+        return {
+            product: {
+                id: newProduct.id?.toString() || "",
+                name,
+                description,
+                price,
+                inStock,
+                isAvailable,
+                category,
+                tags,
+                createdAt: newProduct.createdAt,
+                updatedAt: newProduct.updatedAt
+            }
+        };
     }
 }

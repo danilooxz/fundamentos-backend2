@@ -1,7 +1,6 @@
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { z } from 'zod';
 import { ZodValidationPipe } from './pipes/zod-validation-pipe';
-import { isValidCPF } from "./app.controller";
 import { CreateProductService } from "./create.product.service";
 import { Category } from "@prisma/client";
 
@@ -33,9 +32,9 @@ const createProductBodySchema = z.object({
         isAvailable,  
         category,     
         tags,
-      } = body;
+    } = body;
 
-    await this.createProduct.execute({
+    const product = await this.createProduct.execute({
       name,      
       description, 
       price,        
@@ -44,6 +43,8 @@ const createProductBodySchema = z.object({
       category,     
       tags,
     });
+
+    return {product};
   }
 }   
 

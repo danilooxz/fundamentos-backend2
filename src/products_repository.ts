@@ -19,7 +19,7 @@ export class ProductsRepository {
     }
 
     async findByName(name: string): Promise<Prisma.ProductUncheckedCreateInput | null> {
-        const product = this.prisma.product.findUnique({
+        const product = await this.prisma.product.findUnique({
             where: {
                 name,
             }
@@ -28,8 +28,8 @@ export class ProductsRepository {
         return product;
     }
 
-    async create(product: Prisma.ProductUncheckedCreateInput): Promise<void>{
-        await this.prisma.product.create({
+    async create(product: Prisma.ProductUncheckedCreateInput): Promise<Prisma.ProductUncheckedCreateInput>{
+         return await this.prisma.product.create({
             data: product,
         });
     }
