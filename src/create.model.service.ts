@@ -21,7 +21,7 @@ type CreateModelServiceResponse = {
 
 @Injectable()
 export class CreateModelService {
-    constructor (private modelRepository: ModelsRepository) {}
+    constructor (private modelRepository: ModelsRepository) {} 
 
         async execute({        
             name,      

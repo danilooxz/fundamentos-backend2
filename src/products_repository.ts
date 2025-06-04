@@ -41,7 +41,23 @@ export class ProductsRepository {
             },
         });
     }
-    
+
+    async save (data: Prisma.ModelUncheckedUpdateInput): Promise<void> {
+        await Promise.all([
+            this.prisma.model.update({
+                where: {
+                    id: data.id?.toString(),
+                },
+                data,
+            }),
+        ]);
+    }
+
+    //async create(data: Prisma.ModelUncheckedCreateInput): Promise<void> {
+        //await this.prisma.model.create({
+            //data,
+        //});
+    //}
 }
 
 
