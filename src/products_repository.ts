@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "./prisma.service";
-import { Prisma } from "@prisma/client";
+import { Prisma, Product } from "@prisma/client";
 import { promises } from "dns";
 
 
@@ -33,5 +33,15 @@ export class ProductsRepository {
             data: product,
         });
     }
+
+     async findManyRecent(): Promise<Prisma.ProductUncheckedCreateInput[]> {
+        return await this.prisma.product.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+    }
+    
 }
+
 
