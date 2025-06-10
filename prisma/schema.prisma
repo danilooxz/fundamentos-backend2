@@ -22,17 +22,17 @@ enum Category {
 }
 
 model Product {
-  id           String @id @default(uuid())
-  name         String  @unique
+  id           String   @id @default(uuid())
+  name         String   @unique
   description  String?
   price        Float
-  inStock      Int                    @map("in_stock")    
-  isAvailable  Boolean @default(true) @map("is_available")
+  inStock      Int                     @map("in_stock")    
+  isAvailable  Boolean  @default(true) @map("is_available")
   category     Category
   tags         String[]
 
-  createdAt  DateTime  @default(now())@map("create_at")
-  updatedAt  DateTime? @updatedAt     @map("updated_at")
+  createdAt  DateTime   @default(now())@map("create_at")
+  updatedAt  DateTime?  @updatedAt     @map("updated_at")
 
   @@map("products")
 }
@@ -42,6 +42,7 @@ model User {
   email String @unique
 
   profile Profile? //One-to-One
+  order Order[]    // One-to_Many
 
   createdAt  DateTime  @default(now()) @map("create_at")
   updatedAt  DateTime? @updatedAt     @map("updated_at")
@@ -50,8 +51,8 @@ model User {
 }
 
 model Model {
-  id String    @id @default(uuid())
-  name String @unique
+  id String            @id @default(uuid())
+  name String          @unique
   createdAt  DateTime  @default(now())@map("create_at")
   updatedAt  DateTime? @updatedAt     @map("updated_at")
 
@@ -59,7 +60,7 @@ model Model {
 }
 
 model Profile {
-  id String    @id @default(uuid())
+  id String         @id @default(uuid())
   avatarUrl String? @map("avatar_url")
 
   userId String @unique
@@ -69,5 +70,18 @@ model Profile {
   updatedAt  DateTime? @updatedAt     @map("updated_at")
 
   @@map("profiles")
+}
+
+model Order {
+  id String    @id @default(uuid())
+  total Float
+
+  userId String  
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt  DateTime  @default(now())@map("create_at")
+  updatedAt  DateTime? @updatedAt     @map("updated_at")
+
+  @@map("orders")
 }
 
