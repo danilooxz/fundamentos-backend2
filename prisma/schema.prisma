@@ -31,6 +31,8 @@ model Product {
   category     Category
   tags         String[]
 
+  orderItems OrderItem[] //Many-to-One
+
   createdAt  DateTime   @default(now())@map("create_at")
   updatedAt  DateTime?  @updatedAt     @map("updated_at")
 
@@ -42,7 +44,7 @@ model User {
   email String @unique
 
   profile Profile? //One-to-One
-  order Order[]    // One-to_Many
+  order Order[]    //One-to-Many
 
   createdAt  DateTime  @default(now()) @map("create_at")
   updatedAt  DateTime? @updatedAt     @map("updated_at")
@@ -73,15 +75,31 @@ model Profile {
 }
 
 model Order {
-  id String    @id @default(uuid())
+  id String @id @default(uuid())
   total Float
 
   userId String  
   user User @relation(fields: [userId], references: [id])
+  orderItem OrderItem[]
 
   createdAt  DateTime  @default(now())@map("create_at")
   updatedAt  DateTime? @updatedAt     @map("updated_at")
 
   @@map("orders")
+}
+
+model OrderItem {
+  orderId String
+  productId String
+  quantity Float
+
+  order Order          @relation(fields: [orderId], references: [id])
+  product Product      @relation(fields: [productId], references: [id])
+
+  createdAt  DateTime  @default(now())@map("create_at")
+  updatedAt  DateTime? @updatedAt     @map("updated_at")
+
+  @@id([orderId, productId])
+  @@map("order_items")
 }
 
