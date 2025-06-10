@@ -31,7 +31,7 @@ model Product {
   category     Category
   tags         String[]
 
-  orderItems OrderItem[] //Many-to-One
+  orderItems OrderItem[] //One-to-Many
 
   createdAt  DateTime   @default(now())@map("create_at")
   updatedAt  DateTime?  @updatedAt     @map("updated_at")
@@ -80,7 +80,7 @@ model Order {
 
   userId String  
   user User @relation(fields: [userId], references: [id])
-  orderItem OrderItem[]
+  orderItem OrderItem[] //Many-to-One
 
   createdAt  DateTime  @default(now())@map("create_at")
   updatedAt  DateTime? @updatedAt     @map("updated_at")
