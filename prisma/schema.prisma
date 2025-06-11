@@ -32,6 +32,7 @@ model Product {
   tags         String[]
 
   orderItems OrderItem[] //One-to-Many
+  models    Model[]     @relation("product_models") //Many_to_Many
 
   createdAt  DateTime   @default(now())@map("create_at")
   updatedAt  DateTime?  @updatedAt     @map("updated_at")
@@ -55,6 +56,9 @@ model User {
 model Model {
   id String            @id @default(uuid())
   name String          @unique
+
+  products Product[] @relation("product_models")
+
   createdAt  DateTime  @default(now())@map("create_at")
   updatedAt  DateTime? @updatedAt     @map("updated_at")
 
