@@ -1,5 +1,5 @@
 import { Controller, Put, Param, Body } from '@nestjs/common';
-import { UpdateAvailableProductService } from '../../update-avaliable-product.service';
+import { UpdateAvailableProductService } from '../service/update-avaliable-product.service';
 
 @Controller('/products')
 export class UpdateAvailableProductController {
